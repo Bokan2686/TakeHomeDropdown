@@ -58,6 +58,13 @@ const UserAutoComplete = () => {
     event: React.SyntheticEvent,
     newValue: UserName | null
   ) => {
+    if (
+      event.type === "keydown" &&
+      "key" in event &&
+      (event as React.KeyboardEvent).key !== "Enter"
+    ) {
+      return; // Ignore non-Enter key events
+    }
     if (newValue) {
       const user = users.find((user) => user.id === newValue.id);
       if (user) {
