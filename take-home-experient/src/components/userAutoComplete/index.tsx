@@ -79,18 +79,26 @@ const UserAutoComplete = () => {
         sx={{ width: 300 }}
         onChange={handleChange}
         loading={loading}
-        renderInput={(params) => <TextField {...params} label="Name" />}
+        renderInput={(params) => (
+          <TextField
+            data-testid="auto-complete-label"
+            {...params}
+            label="Name"
+          />
+        )}
       />
 
       {error && <p className="error">{error}</p>}
       {loading && <p className="loading">Loading...</p>}
 
       {selectedUser && (
-        <div className="user-details">
-          <p>{selectedUser?.name}</p>
-          <p>{selectedUser?.address.street}</p>
-          <p>{selectedUser?.address.suite}</p>
-          <p>{getShortZipCode(selectedUser?.address.zipcode)}</p>
+        <div className="user-details" data-testid="user-details">
+          <p data-testid="detail-name">{selectedUser?.name}</p>
+          <p data-testid="detail-street">{selectedUser?.address.street}</p>
+          <p data-testid="detail-suite">{selectedUser?.address.suite}</p>
+          <p data-testid="detail-zip">
+            {getShortZipCode(selectedUser?.address.zipcode)}
+          </p>
         </div>
       )}
     </div>
