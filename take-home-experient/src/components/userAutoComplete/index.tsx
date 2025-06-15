@@ -52,6 +52,13 @@ const UserAutoComplete = () => {
     };
 
     getUsers();
+    return () => {
+      setUsers([]);
+      setNames([]);
+      setSelectedUser(null);
+      setLoading(false);
+      setError(null);
+    };
   }, []);
 
   const handleChange = (
