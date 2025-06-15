@@ -17,3 +17,6 @@ npm install
 Building the project: 
 npm run build
 
+Also,
+If you want to run tests for projects you can run:
+npm run test
