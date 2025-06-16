@@ -1,65 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import fetchUsers from "../../utils/fetch/users";
 import type { User } from "../../utils/fetch/users";
-import { getName, getShortZipCode } from "../../utils/helpers";
+import { getShortZipCode } from "../../utils/helpers";
 
 interface UserName {
   label: string;
   id: number;
 }
 
-const UserAutoComplete = () => {
-  const [users, setUsers] = useState<Array<User>>([]);
-  const [names, setNames] = useState<Array<UserName>>([]);
+const UserAutoComplete = ({
+  users,
+  names,
+  error,
+  loading,
+}: {
+  users: Array<User>;
+  names: Array<UserName>;
+  error?: string | null;
+  loading?: boolean;
+}) => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchUsers();
-        const names = data.map((user: User) => {
-          return {
-            label: getName(user),
-            id: user.id,
-          };
-        });
-        interface NameOption {
-          label: string;
-          id: number;
-        }
-
-        names.sort((a: NameOption, b: NameOption): number => {
-          if (a.label < b.label) return -1;
-          if (a.label > b.label) return 1;
-          return 0;
-        });
-        setNames(names);
-        setUsers(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError(String(err));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getUsers();
-    return () => {
-      setUsers([]);
-      setNames([]);
-      setSelectedUser(null);
-      setLoading(false);
-      setError(null);
-    };
-  }, []);
 
   const handleChange = (
     event: React.SyntheticEvent,
@@ -70,7 +31,7 @@ const UserAutoComplete = () => {
       "key" in event &&
       (event as React.KeyboardEvent).key !== "Enter"
     ) {
-      return; // Ignore non-Enter key events
+      return;
     }
     if (newValue) {
       const user = users.find((user) => user.id === newValue.id);
